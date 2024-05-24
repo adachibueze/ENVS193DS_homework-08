@@ -158,11 +158,11 @@ ggplot(data = drought_exp_clean, # data frame
 
 What is the null model?  
 
-0. **null model here**  
+0. **total biomass as a function of none of the pridictors**  
 
 What is the saturated model?  
 
-1. **saturated model here**  
+1. **total biomass as a function of specific leaf area (SLA), water treatment, and species**  
 
 In class we are going to try two more models:  
 
@@ -193,7 +193,7 @@ par(mfrow = c(2, 2))
 plot(model1)
 # you might get a warning when you run this code - that is ok!
 ```
-
+**dignostics look okay**
 ## 2. total biomass as a function of SLA and water treatment
 
 ```{r}
@@ -217,12 +217,16 @@ plot(model3)
 From the `MuMIn` package
 
 ```{r}
-model.sel(model0,
+model.sel(model0, #takes all model objects and models them in a table
           model1, 
           model2, 
           model3)
-```
+# delta is difference between best model and all other model, the delta AIC for best model is always going to be zero
+#need to choose best model based on AIC model
 
+
+```
+**Spefic leaf area, water treatment and species** are the variables of the best moodel
 Out of the four models we have tried, the best model is the one that includes **insert predictors here**  
 
 Note that this may change once you fit and compare the other model!
@@ -235,17 +239,16 @@ summary(model1)
 
 What are the reference levels?  
 
-- reference for `water_treatment`  
-- reference for `species_name`  
+- reference for `water_treatment` --> reference level is whatever does not appear in table for categorical table
+- reference for `species_name` -->  reference level is whatever does not appear in table 
 
-**reference for water_treatment:** **insert response here**  
-**reference for species_name:** **insert response here**  
+**reference for water_treatment: is drought stressed**  
+**reference for species_name:Acmipson glaber does not appear**  
 
 Interpret the model estimates for the:  
-
-- intercept: **insert response here**  
-- SLA slope: **insert response here**  
-- well watered estimate: **insert response here**    
+**mass of the reference (Acmispon glaber) in drought stressed water treament when SLA = 0**  
+- SLA slope: **FOR EACH unit increase in sla (mm^2/g) you expect a decrease in plant mass of 0.002, NO EFFECT OF SLA ON MASS (high p-value)**  
+- well watered estimate: **on average across species and SLA, well watered plants tend to be 0.12 plus minus 0.02g heavier then drought treatment plants**    
 - Lotus scoparius estimate: **insert response here**    
 - Stipa pulchra estimate: **insert response here**    
 
