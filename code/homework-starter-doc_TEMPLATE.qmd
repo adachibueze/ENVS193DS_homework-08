@@ -45,13 +45,13 @@ library(gtsummary)
 library(flextable)
 library(modelsummary)
 
-drought_exp <- read_xlsx(path = here("data", 
-                                     "Valliere_etal_EcoApps_Data.xlsx"),
-                         sheet = "First Harvest")
+drought_exp <- read_xlsx(path = here("data", # folder data file is in
+                                     "Valliere_etal_EcoApps_Data.xlsx"), #what file actual is
+                         sheet = "First Harvest") #specific sheet it named
 
 # quick look at data 
-str(drought_exp)
-class(drought_exp)
+str(drought_exp) # tells you about the structure of the data
+class(drought_exp) #tells you what kind of thing object is
 ```
 
 ## cleaning
@@ -91,15 +91,21 @@ ggpairs(drought_exp_clean, # data frame
         upper = list(method = "pearson")) + # calculating Pearson correlation coefficient
   theme_bw() + # cleaner theme
   theme(panel.grid = element_blank()) # getting rid of gridlines
+
+#output
+# density curves desribes distribution of each variable
+# on the bottom left have 10 different geom point syle plot for reprsenting relationships between variable
+# also see the correlation between variables as well
+# quick way to show relationships between variables, that helps show  relationship between the data
 ```
 
 Choose 3 pairs of variables to compare. Make notes of those comparisons below.    
 
-**insert comparison 1 here**  
+**leaf dry weight is strongly postively correlated with total mass (Pearson r= 0.46)**  
 
-**insert comparison 2 here**  
+**shoot mass and total mass are strongly positively correlated (Pearson r = 0.92)**  
 
-**insert comparison 3 here**
+**total mass and root mass are strongly positively correlated (Pearson r= 0.858)**
 
 ## Preliminary visualizations  
 
@@ -116,14 +122,14 @@ In this scenario, we're interested in how three variables affect total biomass: 
 ```{r}
 ggplot(data = drought_exp_clean, # data frame
        aes(x = reorder(species_name, # reordering x-axis
-                       -total_g, # in reverse order of mean total mass
+                       -total_g, # in reverse order of mean total mass, helps to see a pattern
                        fun = mean), # calculating mean to reorder
            y = total_g)) + # y-axis
   geom_jitter(width = 0.1, # narrow jitter
               height = 0) # not jittering points up and down
 ```
 
-**response here**
+**gumweed, california poppy, and purple needlegrass seem to have the highest biomass; deerweed, scarlet bugler, and purple needle grass seem to have the lowest biomass**
 
 ### how does total biomass differ between water treatments?
 
@@ -135,7 +141,7 @@ ggplot(data = drought_exp_clean, # data frame
               height = 0) # not jittering points up and down
 ```
 
-**response here**
+**Total biomass is greater when plants are well watered. **
 
 ### how does specific leaf area (SLA) influence total biomass?
 
@@ -146,7 +152,7 @@ ggplot(data = drought_exp_clean, # data frame
   geom_point() # scatterplot
 ```
 
-**response here**
+**The relationship appears to be rather unclear on how SLA influences total biomas, however do see a slight positive correlation. Modertate or strong correlation relationhip depending on how you round**
 
 # Model construction
 
