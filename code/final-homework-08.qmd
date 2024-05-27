@@ -1,0 +1,51 @@
+---
+title: "Homework-03"
+author: "Ada Chibueze"
+date: "05-30-24"
+html:
+output:
+  pdf_document:
+    toc: true
+execute:
+  warning: false
+  message: false
+---
+
+#Problem 1: Multiple linear regression: model selection and construction (52 points)
+
+##Problem 1a: Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
+
+```{r}
+model_dt <- read_csv("/Users/adachibueze/github/ENVS193DS_workshop-08/model_dt.csv")
+
+# Create the flextable object
+model_table <- flextable(model_dt)
+
+# Add a header row that centers "Predictor Variables" over columns 2-4
+model_table <- add_header_row(
+  model_table, 
+  values = c("", "Predictor Variable"), 
+  colwidths = c(1, 3))
+
+print(model_table)
+
+```
+**Table 1.** Linear Models. The table above shows the listed linear models and associated predictor values used for their construction.The column header "Model" assigns a specific name to each linear model, while the "Predictor Variable" header outlines each specific predictor variable used for model construction. The "+" symbols designates that the specific variable was used in its construction while the blank spaces signifies that specific variable was not used.
+
+## Problem 1b: Write a 5-6 sentence “statistical methods” section. (8 points)
+
+To examine the influence of species (categorical), water treatment (categorical), and/or specific leaf area (SLA, numeric) on of total biomass, I constructed 5 individual multiple linear models testing out various combinations of these predictor variables (refer to Problem 1a). To determine the model that best described the influence of the listed predictor variables on total biomass, I first evaluated each models individual AIC score along with its delta AIC score, to pick a model that had of balance of complexity and interpretation. Afterwards, I then checked to see which model adhered best to the assumption of a linear model (residuals are homoscedastic , residual are normally distributed, outliers affecting final model) to move forward with my final decision. To evualate linear model assumptions visually I checked for constant variance of residuals by checking for a straight line and evenly distrusted residual points on the Residuals versus Fitted and Scale-Location plots, made sure that the residuals followed along reference line shown on the QQ Residuals plot, and check to make sure no outlines fell outside of the Cook's Line on Residual verus Leverage plot.
+
+##Problem 1c. Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
+
+```{r}
+model_preds_4 <- ggpredict(model4, 
+                         terms = c("water_treatment", 
+                                   "species_name"))
+view(model_preds_4)
+```
+
+
+
+
+
