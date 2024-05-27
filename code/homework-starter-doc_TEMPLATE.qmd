@@ -219,10 +219,11 @@ plot(model3)
 
 ```{r}
 
-model4 <-lm(total_g~water_treatment+ species,
+model4 <-lm(total_g ~ water_treatment + species,
             data = drought_exp_clean)
 
-
+par(mfrow = c(2, 2))
+plot(model3)
 ```
 
 
@@ -253,6 +254,7 @@ summary(model1)
 summary(model2)
 summary(model3)
 summary(model4)
+
 
 ```
 
