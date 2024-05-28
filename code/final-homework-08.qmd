@@ -2,13 +2,9 @@
 title: "Homework-03"
 author: "Ada Chibueze"
 date: "05-30-24"
-format:
-  html: 
-    toc: true # includes a table of contents in rendered html format
-execute: # for all code chunks
-    warning: false # do not display warnings
-    message: false # do not display messages
+format: pdf
 ---
+
 
 # Problem 1: Multiple linear regression: model selection and construction (52 points)
 
@@ -41,11 +37,19 @@ To examine the influence of species (categorical), water treatment (categorical)
 
 ## Problem 2b: Create a sketch (on paper) of your idea. (2 points)
 
-![Draft sketch](hw_figures/sleep_quality.pdf){width="600" height="400"}
+```{r, fig.pos='H'}
+
+knitr::include_graphics("hw_figures/sleep_quality.pdf")
+
+```
 
 ## Probelm 2c: Make a draft of your visualization. (12 points)
 
-![Visualization Draft](hw_figures/sleep_visualization.pdf){width="600" height="400"}
+```{r, fig.pos='H'}
+
+knitr::include_graphics("hw_figures/sleep_visualization.pdf")
+
+```
 
 # Problem 2d: Write an artist statement. (8 points)
 
@@ -55,6 +59,6 @@ To examine the influence of species (categorical), water treatment (categorical)
 
 ## Problem 3a: Revisit and summarize (6 points)
 
-**
+**The authors used linear regression models to examine the relationship between housing vacancy and urban greening in Toledo, Ohio. They constructed separate linear regression models for the study dates of 1980, 2000, and 2004 to evaluate the relationship between mean NVDI vales and vacancy rates in Toledo Ohio. The authors also made a linear regression model to examine the influence of vacant housing units in Toledo on the amount of overgrown lawns/bumping (a sign of blight)
 
 ## Problem 3b: Visual clarity (10 points)
