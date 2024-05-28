@@ -10,69 +10,35 @@ execute: # for all code chunks
     message: false # do not display messages
 ---
 
-#Problem 1: Multiple linear regression: model selection and construction (52 points)
+# Problem 1: Multiple linear regression: model selection and construction (52 points)
 
-##Problem 1a: Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
+## Problem 1a: Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
 
 ```{r}
-model_dt <- read_csv("/Users/adachibueze/github/ENVS193DS_workshop-08/model_dt.csv")
 
-# Create the flextable object
-model_table <- flextable(model_dt)
-
-# Add a header row that centers "Predictor Variables" over columns 2-4
-model_table <- add_header_row(
-  model_table, 
-  values = c("", "Predictor Variable"), 
-  colwidths = c(1, 3))
-
-print(model_table)
 
 ```
+
 **Table 1.** Linear Models. The table above shows the listed linear models and associated predictor values used for their construction.The column header "Model" assigns a specific name to each linear model, while the "Predictor Variable" header outlines each specific predictor variable used for model construction. The "+" symbols designates that the specific variable was used in its construction while the blank spaces signifies that specific variable was not used.
 
-## Problem 1b: Write a 5-6 sentence “statistical methods” section. (8 points)
+## Problem 1b: Write a 5-6 sentence "statistical methods" section. (8 points)
 
 To examine the influence of species (categorical), water treatment (categorical), and/or specific leaf area (SLA, numeric) on of total biomass, I constructed 5 individual multiple linear models testing out various combinations of these predictor variables (refer to Problem 1a). To determine the model that best described the influence of the listed predictor variables on total biomass, I first evaluated each models individual AIC score along with its delta AIC score, to pick a model that had of balance of complexity and interpretation. Afterwards, I then checked to see which model adhered best to the assumption of a linear model (residuals are homoscedastic , residual are normally distributed, outliers affecting final model) to move forward with my final decision. To evualate linear model assumptions visually I checked for constant variance of residuals by checking for a straight line and evenly distrusted residual points on the Residuals versus Fitted and Scale-Location plots, made sure that the residuals followed along reference line shown on the QQ Residuals plot, and check to make sure no outlines fell outside of the Cook's Line on Residual verus Leverage plot.
 
-##Problem 1c. Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
+## Problem 1c. Make a visualization of the model predictions with underlying data for your "best" model. (20 points)
 
 ```{r}
-model_preds_for_plot_4 <- model_preds_4 %>%
-  rename(water_treatment = x, 
-         species_name = group)
 
-ggplot() + 
-  # Observed data points
-  geom_point(data = drought_exp_clean, 
-             aes(x = species_name, 
-                 y = total_g, 
-                 color = water_treatment)) + 
-  # Model prediction 95% CI ribbon
-  geom_ribbon(data = model_preds_for_plot_4, 
-              aes(x = species_name, 
-                  ymin = conf.low, 
-                  ymax = conf.high, 
-                  fill = water_treatment), 
-              alpha = 0.2) + 
-  # Model predictions
-  geom_line(data = model_preds_for_plot_4, 
-            aes(x = species_name, 
-                y = predicted, 
-                color = water_treatment)) +
-  theme_minimal() +
-  facet_wrap(~species_name) +
-  theme(panel.grid = element_blank()) +
-  labs(title = "Model Predictions with 95% CI",
-       x = "Species Name",
-       y = "Predicted Total G",
-       color = "Water Treatment",
-       fill = "Water Treatment")
              
  
 ```
 
+# Problem 2. Affective visualization (24 points)
 
+## Problem 2a: Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)
 
+**My personal data collection revolves around tracking sleep data, including the number of hours slept, time woken up, screen time before bed, etc. Affective visualization should thematically represent common symbols associated with sleep and nighttime to communicate my data collection to others. From this, I started to think about the moon and its various phases and how I could use them to represent some aspect of my data. Given this, each moon phase could represent an associated value of my sleep quality for the night.**
 
+# Problem 2b: b. Create a sketch (on paper) of your idea. (2 points)
 
+![Visualization sketch](hw_figures/sleep_quality.pdf){ width=600 height=400 }
