@@ -2,13 +2,12 @@
 title: "Homework-03"
 author: "Ada Chibueze"
 date: "05-30-24"
-html:
-output:
-  pdf_document:
-    toc: true
-execute:
-  warning: false
-  message: false
+format:
+  html: 
+    toc: true # includes a table of contents in rendered html format
+execute: # for all code chunks
+    warning: false # do not display warnings
+    message: false # do not display messages
 ---
 
 #Problem 1: Multiple linear regression: model selection and construction (52 points)
@@ -39,10 +38,38 @@ To examine the influence of species (categorical), water treatment (categorical)
 ##Problem 1c. Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
 
 ```{r}
-model_preds_4 <- ggpredict(model4, 
-                         terms = c("water_treatment", 
-                                   "species_name"))
-view(model_preds_4)
+model_preds_for_plot_4 <- model_preds_4 %>%
+  rename(water_treatment = x, 
+         species_name = group)
+
+ggplot() + 
+  # Observed data points
+  geom_point(data = drought_exp_clean, 
+             aes(x = species_name, 
+                 y = total_g, 
+                 color = water_treatment)) + 
+  # Model prediction 95% CI ribbon
+  geom_ribbon(data = model_preds_for_plot_4, 
+              aes(x = species_name, 
+                  ymin = conf.low, 
+                  ymax = conf.high, 
+                  fill = water_treatment), 
+              alpha = 0.2) + 
+  # Model predictions
+  geom_line(data = model_preds_for_plot_4, 
+            aes(x = species_name, 
+                y = predicted, 
+                color = water_treatment)) +
+  theme_minimal() +
+  facet_wrap(~species_name) +
+  theme(panel.grid = element_blank()) +
+  labs(title = "Model Predictions with 95% CI",
+       x = "Species Name",
+       y = "Predicted Total G",
+       color = "Water Treatment",
+       fill = "Water Treatment")
+             
+ 
 ```
 
 

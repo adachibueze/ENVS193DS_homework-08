@@ -2,13 +2,12 @@
 title: "Homework-03"
 author: "Ada Chibueze"
 date: "05-30-24"
-html:
-output:
-  pdf_document:
-    toc: true
-execute:
-  warning: false
-  message: false
+format:
+  html: 
+    toc: true # includes a table of contents in rendered html format
+execute: # for all code chunks
+    warning: false # do not display warnings
+    message: false # do not display messages
 ---
 
 **Relevant definitions:**  
@@ -73,7 +72,20 @@ drought_exp_clean <- drought_exp %>%
     water == "WW" ~ "Well watered",
     water == "DS" ~ "Drought stressed"
   )) %>% 
-  relocate(water_treatment, .after = water) # moving water_treatment column after water
+  relocate(water_treatment, .after = water) %>%
+  mutate(
+    species_name = factor(species_name, levels = c(
+      "Encelia californica",
+      "Eschscholzia californica",
+      "Penstemon centranthifolius",
+      "Grindelia camporum",
+      "Salvia leucophylla",
+      "Nasella pulchra",
+      "Acmispon glaber"
+    )),
+    water_treatment = factor(water_treatment, levels = c( "Drought stressed","Well watered")))
+  # moving water_treatment column after water
+str(drought_exp_clean)
 ```
 
 # Visualizing
@@ -219,11 +231,11 @@ plot(model3)
 
 ```{r}
 
-model4 <-lm(total_g ~ water_treatment + species,
+model4 <-lm(total_g ~ water_treatment + species_name,
             data = drought_exp_clean)
 
 par(mfrow = c(2, 2))
-plot(model3)
+plot(model4)
 ```
 
 
@@ -250,6 +262,7 @@ Note that this may change once you fit and compare the other model!
 # Model summary
 
 ```{r}
+summary(model0)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -280,7 +293,7 @@ Interpret the model estimates for the:
 ```{r}
 model_preds <- ggpredict(model1, 
                          terms = c("sla",
-                                   "water_treatment", 
+                                   "water_treatment",
                                    "species_name"))
 view(model_preds)
 
@@ -307,10 +320,13 @@ The "more customizable" way:
 
 ```{r}
 # creating new data frame of model predictions for plotting
+
 model_preds_for_plotting <- model_preds %>% 
   rename(sla = x, # renaming columns to make this easier to use
          water_treatment = group,
          species_name = facet)
+
+view(model_preds_for_plotting)
 
 # use View(model_preds_for_plotting) 
 # to compare this to the original model_preds data frame
@@ -337,7 +353,7 @@ ggplot() +
   # cleaner theme
   theme_classic() +
   # creating different panels for species
-  facet_wrap(~species_name) 
+  facet_wrap(~species_name)
 ```
 
 

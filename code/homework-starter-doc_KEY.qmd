@@ -75,6 +75,8 @@ drought_exp_clean <- drought_exp %>%
     water == "DS" ~ "Drought stressed"
   )) %>% 
   relocate(water_treatment, .after = water) # moving water_treatment column after water
+
+str(drought_exp_clean)
 ```
 
 # Visualizing
@@ -266,6 +268,7 @@ model_preds <- ggpredict(model1,
                          terms = c("sla",
                                    "water_treatment", 
                                    "species_name"))
+view(model_preds)
 
 # use View(model_preds) to see the predictions as a data frame
 # use model_preds to see the predictions formatted nicely
