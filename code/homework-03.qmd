@@ -142,10 +142,10 @@ aic_values <- sapply(models, AIC)
 # Calculate delta AIC (difference from the minimum AIC)
 delta_aic <- aic_values - min(aic_values)
 
-# Create a summary table
+# Create a a data frame with rows of model,predicator, AIC, and Delta AIC
 summary_table <- data.frame(
-  Model = c("null", "model 1", "model 2", "model 3", "model 4"),
-  Predictors = c("none", "specific leaf area, water treatment, and species name", "specific leaf area and water treatment", "specific leaf and species name", "water treatment and species name"),
+  Model = c("null", "model 1", "model 2", "model 3", "model 4"), 
+  Predictors = c("none", "specific leaf area, water treatment, and plant species", "specific leaf area and water treatment", "specific leaf and plant species", "water treatment and plant species"),
   AIC = aic_values,
   Delta_AIC = delta_aic
 )
@@ -167,7 +167,8 @@ final_table <- flextable::set_table_properties(final_table, width = 1)
 print(final_table)
 ```
 
-**Table 1.** Linear Models. The table above shows the listed linear models and associated predictor values used for their construction.The column header "Model" assigns a specific name to each linear model, while the "Predictor Variable" header outlines each specific predictor variable used for model construction. The "+" symbols designates that the specific variable was used in its construction while the blank spaces signifies that specific variable was not used.
+**Table 1.** Linear Model Summary. The table above shows the listed linear models and associated predictor values used for their construction.The column header "Model" assigns a specific name to each linear model, while the "Predictor Variable" header outlines each specific predictor variable used for model construction.
+The AIC column provides a qualitative score to each model based on their level of complexity and predictive capacity, with lower scores indicating better performance. The Delta AIC column subtracts the lowest AIC score from each model's AIC score to indicate relative model performance.**
 
 ## Problem 1b: Write a 5-6 sentence "statistical methods" section. (8 points)
 
