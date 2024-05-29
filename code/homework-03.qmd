@@ -133,56 +133,102 @@ view(model_preds_4)
 ## Problem 1a: Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
 
 ```{r model-tables}
-# comparing models
-modelsummary::modelsummary( # this function takes a list of models
-  list( 
-    "null" = model0, # "model name" = model object
-    "model 1" = model1,
-    "model 2" = model2,
-    "model 3" = model3,
-    "model 4" = model4
-  )
-) 
+#
+models <- list(model0, model1, model2, model3, model4)
 
+# Extract AIC values
+aic_values <- sapply(models, AIC)
+
+# Calculate delta AIC (difference from the minimum AIC)
+delta_aic <- aic_values - min(aic_values)
+
+# Create a summary table
+summary_table <- data.frame(
+  Model = c("null", "model 1", "model 2", "model 3", "model 4"),
+  Predictors = c("none", "specific leaf area, water treatment, and species name", "specific leaf area and water treatment", "specific leaf and species name", "water treatment and species name"),
+  AIC = aic_values,
+  Delta_AIC = delta_aic
+)
+
+view(summary_table)
+
+final_table <- flextable(summary_table)
+
+# Autofit columns
+final_table <- flextable::autofit(final_table)
+
+# Set table width and layout
+final_table <- flextable::set_table_properties(final_table, width = 1, layout = "autofit")
+
+# Adjust column widths (optional)
+final_table <- flextable::set_table_properties(final_table, width = 1)
+
+# Print the wider flextable
+print(final_table)
 ```
 
 **Table 1.** Linear Models. The table above shows the listed linear models and associated predictor values used for their construction.The column header "Model" assigns a specific name to each linear model, while the "Predictor Variable" header outlines each specific predictor variable used for model construction. The "+" symbols designates that the specific variable was used in its construction while the blank spaces signifies that specific variable was not used.
 
 ## Problem 1b: Write a 5-6 sentence "statistical methods" section. (8 points)
 
-To examine the influence of species (categorical), water treatment (categorical), and/or specific leaf area (SLA, numeric) on of total biomass, I constructed 5 individual multiple linear models testing out various combinations of these predictor variables (refer to Problem 1a). To determine the model that best described the influence of the listed predictor variables on total biomass, I first evaluated each models individual AIC score along with its delta AIC score, to pick a model that had of balance of complexity and interpretation. Afterwards, I then checked to see which model adhered best to the assumption of a linear model (residuals are homoscedastic , residual are normally distributed, outliers affecting final model) to move forward with my final decision. To evualate linear model assumptions visually I checked for constant variance of residuals by checking for a straight line and evenly distrusted residual points on the Residuals versus Fitted and Scale-Location plots, made sure that the residuals followed along reference line shown on the QQ Residuals plot, and check to make sure no outlines fell outside of the Cook's Line on Residual verus Leverage plot.
+**To examine the influence of species (categorical) and water treatment (categorical) on total biomass, I constructed five individual multiple linear models testing various combinations of these predictor variables (refer to Problem 1a). To determine the model that best described the influence of the listed predictor variables on total biomass, I first evaluated each model's individual AIC score along with its delta AIC score to select a model that balanced complexity and interpretability. The null model helped me to assess whether the inclusion of the predictor variables significantly improved model fit. The saturated model, provided a reference point for which predicator variables had significance in relation to the response variable (total biomass).**
+
+**Next, I checked which model adhered best to the assumptions of a linear model (residuals are homoscedastic, residuals are normally distributed, outliers affecting the final model) to move forward with my final decision. To evaluate linear model assumptions visually, I checked for constant variance of residuals by looking for a straight line and evenly distributed residual points on the Residuals versus Fitted and Scale-Location plots, ensured that the residuals followed the reference line shown on the QQ Residuals plot, and confirmed that no outliers fell outside the Cook's distance line on the Residuals versus Leverage plot.**
 
 ## Problem 1c. Make a visualization of the model predictions with underlying data for your "best" model. (20 points)
 
 ```{r model-predictions-with-ggplot}
 # creating new data frame of model predictions for plotting
 model4_preds_for_plotting <- model_preds_4 %>% 
-  rename(water_treatment = x,
-         species_name = group)
+#renaming columns for easier data wrangling
+  rename(water_treatment = x, #renamed to water treatment
+         species_name = group) #rename to species_name
 
 ggplot() +
-   geom_jitter(data = drought_exp_clean,
+  #jittering underlying data
+   geom_jitter(data = drought_exp_clean, 
+    #setting x-axis
               aes(x = water_treatment,
+    #setting y axis
                   y = total_g,
+    #grouping up species name
                   group = species_name,
+    #setting color to water treatment
                   color = water_treatment),
-              alpha = 0.3,
+    #setting transparency of data
+              alpha = 0.2,
+    #bringing points cloer together
               width = 0.2) +
+  #constructing the 95% confidence interval
   geom_errorbar(data = model4_preds_for_plotting,
+              #setting x-axic
                 aes(x = water_treatment,
+              #setting ymin value
                     ymin = conf.low,
+              #setting ymax value
                     ymax = conf.high),
+              #setting width of error bars
                 width = 0.2) +
+  #plotting predicted value
   geom_point(data = model4_preds_for_plotting,
+  #setting x-axis
              aes(x = water_treatment,
+  #setting y-axis
                  y = predicted)) +
+  #assigning colors to watertreatment
   scale_color_manual(values = c("Drought stressed" = "#660000", "Well watered" = "#0066CC")) +
+  #faceting by species
   facet_wrap(~species_name) +
+  #apply different theme
   theme_classic() +
+  #getting rid of gridlines
   theme(panel.grid = element_blank(),
         strip.background = element_blank(),
+        #remove legend
         legend.position = "none",
+        #changing front
         element_text(family = "Serif")) +
+  #adding meaningful labels to graph
   labs(x = "Water Treatment",
        y = "Total Biomass")
 ```
@@ -196,7 +242,7 @@ ggplot() +
 ## Problem 2b: Create a sketch (on paper) of your idea. (2 points)
 
 ```{r, fig.pos='H', fig.width=6, fig.height=8}
-
+#setting on the page
 knitr::include_graphics("hw_figures/sleep_quality.pdf")
 
 ```
@@ -204,7 +250,7 @@ knitr::include_graphics("hw_figures/sleep_quality.pdf")
 ## Probelm 2c: Make a draft of your visualization. (12 points)
 
 ```{r, fig.pos='H'}
-
+#setting on the page
 knitr::include_graphics("hw_figures/sleep_visualization.pdf")
 
 ```
@@ -221,10 +267,13 @@ knitr::include_graphics("hw_figures/sleep_visualization.pdf")
 
 ```{r, fig.pos='H'}
 
-knitr::include_graphics("hw_figures/Figure_3.pdf")
+#setting on the page
+knitr::include_graphics("hw_figures/Figure_3.pdf") 
 
+#setting image on the page
 knitr::include_graphics("hw_figures/Figure_4.pdf")
 
+#setting image on the page
 knitr::include_graphics("hw_figures/Table_2.pdf")
 
 ```
