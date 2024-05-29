@@ -1,0 +1,247 @@
+---
+title: "Homework-03"
+author: "Ada Chibueze"
+date: "05-30-24"
+format: 
+  html: 
+    toc: true # includes a table of contents in rendered html format
+execute: # for all code chunks
+    warning: false # do not display warnings
+    message: false # do not display messages
+---
+
+## reading in packages
+
+```{r set-up}
+# general use
+library(tidyverse)
+library(readxl)
+library(here)
+library(janitor)
+
+# visualizing pairs
+library(GGally)
+
+# model selection
+library(MuMIn)
+
+# model predictions
+library(ggeffects)
+
+# model tables
+library(gtsummary)
+library(flextable)
+library(modelsummary)
+
+drought_exp <- read_xlsx(path = here("data", 
+                                     "Valliere_etal_EcoApps_Data.xlsx"),
+                         sheet = "First Harvest")
+
+# quick look at data 
+str(drought_exp)
+class(drought_exp)
+```
+
+## cleaning
+
+```{r cleaning}
+# cleaning
+drought_exp_clean <- drought_exp %>% 
+  clean_names() %>% # nicer column names
+  mutate(species_name = case_when( # adding column with species scientific names
+    species == "ENCCAL" ~ "Encelia californica", # bush sunflower
+    species == "ESCCAL" ~ "Eschscholzia californica", # California poppy
+    species == "PENCEN" ~ "Penstemon centranthifolius", # Scarlet bugler
+    species == "GRICAM" ~ "Grindelia camporum", # great valley gumweed
+    species == "SALLEU" ~ "Salvia leucophylla", # Purple sage
+    species == "STIPUL" ~ "Nasella pulchra", # Purple needlegrass
+    species == "LOTSCO" ~ "Acmispon glaber" # deerweed
+  )) %>% 
+  relocate(species_name, .after = species) %>% # moving species_name column after species
+  mutate(water_treatment = case_when( # adding column with full treatment names
+    water == "WW" ~ "Well watered",
+    water == "DS" ~ "Drought stressed"
+  )) %>% 
+  relocate(water_treatment, .after = water) # moving water_treatment column after water
+```
+
+## 0. Null model
+
+```{r null-model0}
+model0 <- lm(total_g ~ 1, # formula
+             data = drought_exp_clean) # data frame
+```
+
+## 1. total biomass as a function of SLA, water treatment, and species
+
+```{r saturated-model1}
+# saturated model
+model1 <- lm(total_g ~ sla + water_treatment + species_name,
+             data = drought_exp_clean)
+
+par(mfrow = c(2, 2))
+plot(model1)
+# you might get a warning when you run this code - that is ok!
+```
+
+## 2. total biomass as a function of SLA and water treatment
+
+```{r simpler-model2}
+model2 <- lm(total_g ~ sla + water_treatment,
+             data = drought_exp_clean)
+
+par(mfrow = c(2, 2))
+plot(model2)
+```
+
+## 3. total biomass as a function of SLA and species
+
+```{r simpler-model3}
+model3 <- lm(total_g ~ sla + species_name,
+             data = drought_exp_clean)
+
+par(mfrow = c(2, 2))
+plot(model3)
+```
+
+## 4. total biomass as a function of water treatment and species
+
+```{r}
+model4 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+
+par(mfrow = c(2, 2))
+plot(model4)
+```
+
+
+
+```{r model-predictions-data-frame}
+
+model_preds_4 <- ggpredict(model4, 
+                         terms = c("water_treatment", 
+                                   "species_name"))
+
+view(model_preds_4)
+
+# use View(model_preds) to see the predictions as a data frame
+# use model_preds to see the predictions formatted nicely
+```
+
+# Problem 1: Multiple linear regression: model selection and construction (52 points)
+
+## Problem 1a: Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
+
+```{r model-tables}
+# comparing models
+modelsummary::modelsummary( # this function takes a list of models
+  list( 
+    "null" = model0, # "model name" = model object
+    "model 1" = model1,
+    "model 2" = model2,
+    "model 3" = model3,
+    "model 4" = model4
+  )
+) 
+
+```
+
+**Table 1.** Linear Models. The table above shows the listed linear models and associated predictor values used for their construction.The column header "Model" assigns a specific name to each linear model, while the "Predictor Variable" header outlines each specific predictor variable used for model construction. The "+" symbols designates that the specific variable was used in its construction while the blank spaces signifies that specific variable was not used.
+
+## Problem 1b: Write a 5-6 sentence "statistical methods" section. (8 points)
+
+To examine the influence of species (categorical), water treatment (categorical), and/or specific leaf area (SLA, numeric) on of total biomass, I constructed 5 individual multiple linear models testing out various combinations of these predictor variables (refer to Problem 1a). To determine the model that best described the influence of the listed predictor variables on total biomass, I first evaluated each models individual AIC score along with its delta AIC score, to pick a model that had of balance of complexity and interpretation. Afterwards, I then checked to see which model adhered best to the assumption of a linear model (residuals are homoscedastic , residual are normally distributed, outliers affecting final model) to move forward with my final decision. To evualate linear model assumptions visually I checked for constant variance of residuals by checking for a straight line and evenly distrusted residual points on the Residuals versus Fitted and Scale-Location plots, made sure that the residuals followed along reference line shown on the QQ Residuals plot, and check to make sure no outlines fell outside of the Cook's Line on Residual verus Leverage plot.
+
+## Problem 1c. Make a visualization of the model predictions with underlying data for your "best" model. (20 points)
+
+```{r model-predictions-with-ggplot}
+# creating new data frame of model predictions for plotting
+model4_preds_for_plotting <- model_preds_4 %>% 
+  rename(water_treatment = x,
+         species_name = group)
+
+ggplot() +
+   geom_jitter(data = drought_exp_clean,
+              aes(x = water_treatment,
+                  y = total_g,
+                  group = species_name,
+                  color = water_treatment),
+              alpha = 0.3,
+              width = 0.2) +
+  geom_errorbar(data = model4_preds_for_plotting,
+                aes(x = water_treatment,
+                    ymin = conf.low,
+                    ymax = conf.high),
+                width = 0.2) +
+  geom_point(data = model4_preds_for_plotting,
+             aes(x = water_treatment,
+                 y = predicted)) +
+  scale_color_manual(values = c("Drought stressed" = "#660000", "Well watered" = "#0066CC")) +
+  facet_wrap(~species_name) +
+  theme_classic() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank(),
+        legend.position = "none",
+        element_text(family = "Serif")) +
+  labs(x = "Water Treatment",
+       y = "Total Biomass")
+```
+
+# Problem 2. Affective visualization (24 points)
+
+## Problem 2a: Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)
+
+**My personal data collection revolves around tracking sleep data, including the number of hours slept, time woken up, screen time before bed, etc. Affective visualization should thematically represent common symbols associated with sleep and nighttime to communicate my data collection to others. From this, I started to think about the moon and its various phases and how I could use them to represent some aspect of my data. Given this, each moon phase could represent an associated value of my sleep quality for the night.**
+
+## Problem 2b: Create a sketch (on paper) of your idea. (2 points)
+
+```{r, fig.pos='H', fig.width=6, fig.height=8}
+
+knitr::include_graphics("hw_figures/sleep_quality.pdf")
+
+```
+
+## Probelm 2c: Make a draft of your visualization. (12 points)
+
+```{r, fig.pos='H'}
+
+knitr::include_graphics("hw_figures/sleep_visualization.pdf")
+
+```
+
+# Problem 2d: Write an artist statement. (8 points)
+
+**In the piece I am showing how my sleep quality varies over the month of month of May. As the moon wanes it is indicative of a lower quality of sleeps, while as it waxes it represents my sleep quality increasing. I knew that I want to draw upon figures representative to sleep and night time hence the decision to use the moon, however for formatting I was inspired my some of the artistic pieces presented in Stefanie Posavec and Giorgia Lupi's Dear Data project. The form of my work is a visual display I made in Canvas. To make this visual I found different images of the moon online to represent different sleep levels, and then inserted them into the calendar I made to play on the idea of time and changes in sleep quality throghout the month of May.**
+
+# Problem 3. Statistical critique (36 points)
+
+## Problem 3a: Revisit and summarize (6 points)
+
+**The authors used linear regression models to examine the relationship between housing vacancy and urban greening in Toledo, Ohio. They constructed separate linear regression models for the years 1980, 2000, and 2004 to evaluate the relationship between mean NDVI values and vacancy rates in Toledo. Additionally, they created a linear regression model to examine the influence of vacant housing units on the amount of overgrown lawns and dumping (a sign of blight). Lastly, the authors calculated Spearman correlations to explore the relationship between vacancy and race, wealth, poverty, and educational attainment.**
+
+```{r, fig.pos='H'}
+
+knitr::include_graphics("hw_figures/Figure_3.pdf")
+
+knitr::include_graphics("hw_figures/Figure_4.pdf")
+
+knitr::include_graphics("hw_figures/Table_2.pdf")
+
+```
+
+## Problem 3b: Visual clarity (10 points)
+
+**In Figures 3 and 4, the authors used meaningful x and y axes to signify their predictor and response variables for readers. For both of these linear regression models, the authors showcased the underlying data alongside the model predictions. In Figure 3, the authors differentiated data points for three grouping variables (1980, 2000, and 2014) by assigning each year and its associated data unique symbols and shapes. This helped to distinguish between the different years, boosting the level of interpretation for the graph.**
+
+## Problem 3c: Aesthetic clarity (10 points)
+
+**The authors focused on minimizing unnecessary visual elements required for interpreting the linear models. In both figures, visual elements are restricted to the model prediction line and the associated underlying data, enhancing interpretation while reducing complexity. One visual element that could be removed is the legend in Figure 4, faceting by each year would enable conveying the same information while reducing visual clutter. Overall the data:ink ratio in the figures is relatively strong with few areas for improvement.**
+
+## Problem 3d: Recommendations (can be longer than 4 sentences, 10 points)
+
+**For both Figures 3 and 4, the opacity and lack of color of the underlying data make it difficult to distinguish between points. This design choice causes individual points to merge together. Given this, I recommend that the authors reduce the opacity of the individual points and assign colors to increase clarity. Additionally, throughout the class, we have emphasized the importance of showing uncertainty in all visualizations for greater transparency in data communication. Therefore, for the linear regression models in Figures 3 and 4, I suggest including a 95 percent confidence interval around the model prediction to enhance data transparency. Lastly, as mentioned before, while the data-to-ink ratio is relatively good in the figures, there is room for improvement. In Figure 4, the authors should facet the data by year, which would eliminate the need for a legend, further reducing visual clutter.**
+
+
+**Note 1: notice all the information at the bottom of the `modelsummary` output - if you only needed the AIC and delta AIC, what could you do? see package documentation for help**
+
+**Note 2: you will always have to report the F-statistic, degrees of freedom, test statistic, p-value, ⍺, and R^2^. Whether or not this information is in a table is up to you.**

@@ -215,6 +215,15 @@ model3 <- lm(total_g ~ sla + species_name,
 par(mfrow = c(2, 2))
 plot(model3)
 ```
+## 4. total biomass as a function of water treatment and species
+
+```{r simpler-model4}
+model4 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+
+par(mfrow = c(2, 2))
+plot(model4)
+```
 
 # Model selection
 

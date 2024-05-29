@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ada Chibueze">
+<meta name="dcterms.date" content="2024-05-30">
+
+<title>Homework-03</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="homework-03_files/libs/clipboard/clipboard.min.js"></script>
+<script src="homework-03_files/libs/quarto-html/quarto.js"></script>
+<script src="homework-03_files/libs/quarto-html/popper.min.js"></script>
+<script src="homework-03_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="homework-03_files/libs/quarto-html/anchor.min.js"></script>
+<link href="homework-03_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="homework-03_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="homework-03_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="homework-03_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="homework-03_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#reading-in-packages" id="toc-reading-in-packages" class="nav-link active" data-scroll-target="#reading-in-packages">reading in packages</a></li>
+  <li><a href="#cleaning" id="toc-cleaning" class="nav-link" data-scroll-target="#cleaning">cleaning</a></li>
+  <li><a href="#null-model" id="toc-null-model" class="nav-link" data-scroll-target="#null-model">0. Null model</a></li>
+  <li><a href="#total-biomass-as-a-function-of-sla-water-treatment-and-species" id="toc-total-biomass-as-a-function-of-sla-water-treatment-and-species" class="nav-link" data-scroll-target="#total-biomass-as-a-function-of-sla-water-treatment-and-species">1. total biomass as a function of SLA, water treatment, and species</a></li>
+  <li><a href="#total-biomass-as-a-function-of-sla-and-water-treatment" id="toc-total-biomass-as-a-function-of-sla-and-water-treatment" class="nav-link" data-scroll-target="#total-biomass-as-a-function-of-sla-and-water-treatment">2. total biomass as a function of SLA and water treatment</a></li>
+  <li><a href="#total-biomass-as-a-function-of-sla-and-species" id="toc-total-biomass-as-a-function-of-sla-and-species" class="nav-link" data-scroll-target="#total-biomass-as-a-function-of-sla-and-species">3. total biomass as a function of SLA and species</a></li>
+  <li><a href="#total-biomass-as-a-function-of-water-treatment-and-species" id="toc-total-biomass-as-a-function-of-water-treatment-and-species" class="nav-link" data-scroll-target="#total-biomass-as-a-function-of-water-treatment-and-species">4. total biomass as a function of water treatment and species</a></li>
+  <li><a href="#problem-1-multiple-linear-regression-model-selection-and-construction-52-points" id="toc-problem-1-multiple-linear-regression-model-selection-and-construction-52-points" class="nav-link" data-scroll-target="#problem-1-multiple-linear-regression-model-selection-and-construction-52-points">Problem 1: Multiple linear regression: model selection and construction (52 points)</a>
+  <ul class="collapse">
+  <li><a href="#problem-1a-make-a-table-or-list-of-all-the-models-from-class-and-the-last-one-you-constructed-on-your-own.-write-a-caption-for-your-table.-8-points" id="toc-problem-1a-make-a-table-or-list-of-all-the-models-from-class-and-the-last-one-you-constructed-on-your-own.-write-a-caption-for-your-table.-8-points" class="nav-link" data-scroll-target="#problem-1a-make-a-table-or-list-of-all-the-models-from-class-and-the-last-one-you-constructed-on-your-own.-write-a-caption-for-your-table.-8-points">Problem 1a: Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)</a></li>
+  <li><a href="#problem-1b-write-a-5-6-sentence-statistical-methods-section.-8-points" id="toc-problem-1b-write-a-5-6-sentence-statistical-methods-section.-8-points" class="nav-link" data-scroll-target="#problem-1b-write-a-5-6-sentence-statistical-methods-section.-8-points">Problem 1b: Write a 5-6 sentence “statistical methods” section. (8 points)</a></li>
+  <li><a href="#problem-1c.-make-a-visualization-of-the-model-predictions-with-underlying-data-for-your-best-model.-20-points" id="toc-problem-1c.-make-a-visualization-of-the-model-predictions-with-underlying-data-for-your-best-model.-20-points" class="nav-link" data-scroll-target="#problem-1c.-make-a-visualization-of-the-model-predictions-with-underlying-data-for-your-best-model.-20-points">Problem 1c. Make a visualization of the model predictions with underlying data for your “best” model. (20 points)</a></li>
+  </ul></li>
+  <li><a href="#problem-2.-affective-visualization-24-points" id="toc-problem-2.-affective-visualization-24-points" class="nav-link" data-scroll-target="#problem-2.-affective-visualization-24-points">Problem 2. Affective visualization (24 points)</a>
+  <ul class="collapse">
+  <li><a href="#problem-2a-describe-in-words-what-an-affective-visualization-could-look-like-for-your-personal-data-3-5-sentences.-2-points" id="toc-problem-2a-describe-in-words-what-an-affective-visualization-could-look-like-for-your-personal-data-3-5-sentences.-2-points" class="nav-link" data-scroll-target="#problem-2a-describe-in-words-what-an-affective-visualization-could-look-like-for-your-personal-data-3-5-sentences.-2-points">Problem 2a: Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)</a></li>
+  <li><a href="#problem-2b-create-a-sketch-on-paper-of-your-idea.-2-points" id="toc-problem-2b-create-a-sketch-on-paper-of-your-idea.-2-points" class="nav-link" data-scroll-target="#problem-2b-create-a-sketch-on-paper-of-your-idea.-2-points">Problem 2b: Create a sketch (on paper) of your idea. (2 points)</a></li>
+  <li><a href="#probelm-2c-make-a-draft-of-your-visualization.-12-points" id="toc-probelm-2c-make-a-draft-of-your-visualization.-12-points" class="nav-link" data-scroll-target="#probelm-2c-make-a-draft-of-your-visualization.-12-points">Probelm 2c: Make a draft of your visualization. (12 points)</a></li>
+  </ul></li>
+  <li><a href="#problem-2d-write-an-artist-statement.-8-points" id="toc-problem-2d-write-an-artist-statement.-8-points" class="nav-link" data-scroll-target="#problem-2d-write-an-artist-statement.-8-points">Problem 2d: Write an artist statement. (8 points)</a></li>
+  <li><a href="#problem-3.-statistical-critique-36-points" id="toc-problem-3.-statistical-critique-36-points" class="nav-link" data-scroll-target="#problem-3.-statistical-critique-36-points">Problem 3. Statistical critique (36 points)</a>
+  <ul class="collapse">
+  <li><a href="#problem-3a-revisit-and-summarize-6-points" id="toc-problem-3a-revisit-and-summarize-6-points" class="nav-link" data-scroll-target="#problem-3a-revisit-and-summarize-6-points">Problem 3a: Revisit and summarize (6 points)</a></li>
+  <li><a href="#problem-3b-visual-clarity-10-points" id="toc-problem-3b-visual-clarity-10-points" class="nav-link" data-scroll-target="#problem-3b-visual-clarity-10-points">Problem 3b: Visual clarity (10 points)</a></li>
+  <li><a href="#problem-3c-aesthetic-clarity-10-points" id="toc-problem-3c-aesthetic-clarity-10-points" class="nav-link" data-scroll-target="#problem-3c-aesthetic-clarity-10-points">Problem 3c: Aesthetic clarity (10 points)</a></li>
+  <li><a href="#problem-3d-recommendations-can-be-longer-than-4-sentences-10-points" id="toc-problem-3d-recommendations-can-be-longer-than-4-sentences-10-points" class="nav-link" data-scroll-target="#problem-3d-recommendations-can-be-longer-than-4-sentences-10-points">Problem 3d: Recommendations (can be longer than 4 sentences, 10 points)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework-03</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ada Chibueze </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 30, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="reading-in-packages" class="level2">
+<h2 class="anchored" data-anchor-id="reading-in-packages">reading in packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># general use</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualizing pairs</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># model selection</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MuMIn)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># model predictions</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggeffects)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># model tables</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flextable)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>drought_exp <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"data"</span>, </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">"Valliere_etal_EcoApps_Data.xlsx"</span>),</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sheet =</span> <span class="st">"First Harvest"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># quick look at data </span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(drought_exp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [70 × 13] (S3: tbl_df/tbl/data.frame)
+ $ Species            : chr [1:70] "ENCCAL" "ENCCAL" "ENCCAL" "ENCCAL" ...
+ $ Water              : chr [1:70] "WW" "WW" "WW" "WW" ...
+ $ Rep #              : num [1:70] 1 2 3 4 5 1 2 3 4 5 ...
+ $ Height (cm)        : num [1:70] 5.8 4.9 8.4 6.5 7.1 3.2 4.4 4.2 4.5 3.9 ...
+ $ Leaf #             : num [1:70] 11 8 11 12 10 7 7 10 8 6 ...
+ $ Leaf dry weight (g): num [1:70] 0.0294 0.0185 0.0177 0.0178 0.0164 0.017 0.0193 0.0153 0.0159 0.0133 ...
+ $ Leaf area (cm2)    : num [1:70] 5.01 3.98 3.69 3.84 3.63 3.06 3.1 2.94 2.73 2.61 ...
+ $ SLA                : num [1:70] 170 215 209 216 222 ...
+ $ Total LA           : num [1:70] 55.1 31.8 40.6 46.1 36.3 ...
+ $ Shoot (g)          : num [1:70] 0.253 0.164 0.241 0.213 0.232 ...
+ $ Root (g)           : num [1:70] 0.202 0.165 0.209 0.146 0.12 ...
+ $ Total (g)          : num [1:70] 0.455 0.329 0.45 0.359 0.352 ...
+ $ R:S                : num [1:70] 0.8 1 0.9 0.7 0.5 0.8 1.2 3.1 0.9 1.2 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(drought_exp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "tbl_df"     "tbl"        "data.frame"</code></pre>
+</div>
+</div>
+</section>
+<section id="cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="cleaning">cleaning</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>drought_exp_clean <span class="ot">&lt;-</span> drought_exp <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> <span class="co"># nicer column names</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species_name =</span> <span class="fu">case_when</span>( <span class="co"># adding column with species scientific names</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    species <span class="sc">==</span> <span class="st">"ENCCAL"</span> <span class="sc">~</span> <span class="st">"Encelia californica"</span>, <span class="co"># bush sunflower</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    species <span class="sc">==</span> <span class="st">"ESCCAL"</span> <span class="sc">~</span> <span class="st">"Eschscholzia californica"</span>, <span class="co"># California poppy</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    species <span class="sc">==</span> <span class="st">"PENCEN"</span> <span class="sc">~</span> <span class="st">"Penstemon centranthifolius"</span>, <span class="co"># Scarlet bugler</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    species <span class="sc">==</span> <span class="st">"GRICAM"</span> <span class="sc">~</span> <span class="st">"Grindelia camporum"</span>, <span class="co"># great valley gumweed</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    species <span class="sc">==</span> <span class="st">"SALLEU"</span> <span class="sc">~</span> <span class="st">"Salvia leucophylla"</span>, <span class="co"># Purple sage</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    species <span class="sc">==</span> <span class="st">"STIPUL"</span> <span class="sc">~</span> <span class="st">"Nasella pulchra"</span>, <span class="co"># Purple needlegrass</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    species <span class="sc">==</span> <span class="st">"LOTSCO"</span> <span class="sc">~</span> <span class="st">"Acmispon glaber"</span> <span class="co"># deerweed</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species_name, <span class="at">.after =</span> species) <span class="sc">%&gt;%</span> <span class="co"># moving species_name column after species</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">water_treatment =</span> <span class="fu">case_when</span>( <span class="co"># adding column with full treatment names</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    water <span class="sc">==</span> <span class="st">"WW"</span> <span class="sc">~</span> <span class="st">"Well watered"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    water <span class="sc">==</span> <span class="st">"DS"</span> <span class="sc">~</span> <span class="st">"Drought stressed"</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(water_treatment, <span class="at">.after =</span> water) <span class="co"># moving water_treatment column after water</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="null-model" class="level2">
+<h2 class="anchored" data-anchor-id="null-model">0. Null model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model0 <span class="ot">&lt;-</span> <span class="fu">lm</span>(total_g <span class="sc">~</span> <span class="dv">1</span>, <span class="co"># formula</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> drought_exp_clean) <span class="co"># data frame</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="total-biomass-as-a-function-of-sla-water-treatment-and-species" class="level2">
+<h2 class="anchored" data-anchor-id="total-biomass-as-a-function-of-sla-water-treatment-and-species">1. total biomass as a function of SLA, water treatment, and species</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># saturated model</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(total_g <span class="sc">~</span> sla <span class="sc">+</span> water_treatment <span class="sc">+</span> species_name,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> drought_exp_clean)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="homework-03_files/figure-html/saturated-model1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you might get a warning when you run this code - that is ok!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="total-biomass-as-a-function-of-sla-and-water-treatment" class="level2">
+<h2 class="anchored" data-anchor-id="total-biomass-as-a-function-of-sla-and-water-treatment">2. total biomass as a function of SLA and water treatment</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(total_g <span class="sc">~</span> sla <span class="sc">+</span> water_treatment,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> drought_exp_clean)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="homework-03_files/figure-html/simpler-model2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="total-biomass-as-a-function-of-sla-and-species" class="level2">
+<h2 class="anchored" data-anchor-id="total-biomass-as-a-function-of-sla-and-species">3. total biomass as a function of SLA and species</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(total_g <span class="sc">~</span> sla <span class="sc">+</span> species_name,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> drought_exp_clean)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="homework-03_files/figure-html/simpler-model3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="total-biomass-as-a-function-of-water-treatment-and-species" class="level2">
+<h2 class="anchored" data-anchor-id="total-biomass-as-a-function-of-water-treatment-and-species">4. total biomass as a function of water treatment and species</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(total_g <span class="sc">~</span> water_treatment <span class="sc">+</span> species_name,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> drought_exp_clean)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="homework-03_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model_preds_4 <span class="ot">&lt;-</span> <span class="fu">ggpredict</span>(model4, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"water_treatment"</span>, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"species_name"</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(model_preds_4)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># use View(model_preds) to see the predictions as a data frame</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># use model_preds to see the predictions formatted nicely</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="problem-1-multiple-linear-regression-model-selection-and-construction-52-points" class="level1">
+<h1>Problem 1: Multiple linear regression: model selection and construction (52 points)</h1>
+<section id="problem-1a-make-a-table-or-list-of-all-the-models-from-class-and-the-last-one-you-constructed-on-your-own.-write-a-caption-for-your-table.-8-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1a-make-a-table-or-list-of-all-the-models-from-class-and-the-last-one-you-constructed-on-your-own.-write-a-caption-for-your-table.-8-points">Problem 1a: Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparing models</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>modelsummary<span class="sc">::</span><span class="fu">modelsummary</span>( <span class="co"># this function takes a list of models</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>( </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"null"</span> <span class="ot">=</span> model0, <span class="co"># "model name" = model object</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model 1"</span> <span class="ot">=</span> model1,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model 2"</span> <span class="ot">=</span> model2,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model 3"</span> <span class="ot">=</span> model3,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model 4"</span> <span class="ot">=</span> model4</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+ 
+
+  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_dlxquixwnsb564c13w5d</title>
+    <style>
+.table td.tinytable_css_gc56s1wrnq3yg4q64bi6, .table th.tinytable_css_gc56s1wrnq3yg4q64bi6 {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_cuefl4xjwpe2mgyp3q16, .table th.tinytable_css_cuefl4xjwpe2mgyp3q16 {    text-align: left; }
+.table td.tinytable_css_pe53xbnuh8m6do00t780, .table th.tinytable_css_pe53xbnuh8m6do00t780 {    text-align: center; }
+.table td.tinytable_css_ys75bpdrcwspkrykhjjc, .table th.tinytable_css_ys75bpdrcwspkrykhjjc {    text-align: center; }
+.table td.tinytable_css_8zgsvlq23c8axpx08b8d, .table th.tinytable_css_8zgsvlq23c8axpx08b8d {    text-align: center; }
+.table td.tinytable_css_r2xmy2zchv9wegr4b1c1, .table th.tinytable_css_r2xmy2zchv9wegr4b1c1 {    text-align: center; }
+.table td.tinytable_css_9o28oot3pv6s9t0hxal5, .table th.tinytable_css_9o28oot3pv6s9t0hxal5 {    text-align: center; }
+.table td.tinytable_css_xitdd0t17goxvi8vqdkd, .table th.tinytable_css_xitdd0t17goxvi8vqdkd {    border-bottom: solid 0.05em black; }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+  
+
+  
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_dlxquixwnsb564c13w5d" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">null</th>
+                <th scope="col">model 1</th>
+                <th scope="col">model 2</th>
+                <th scope="col">model 3</th>
+                <th scope="col">model 4</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>(Intercept)                           </td>
+                  <td>0.279  </td>
+                  <td>0.080  </td>
+                  <td>0.047  </td>
+                  <td>-0.033 </td>
+                  <td>0.055  </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>(0.017)</td>
+                  <td>(0.056)</td>
+                  <td>(0.054)</td>
+                  <td>(0.067)</td>
+                  <td>(0.025)</td>
+                </tr>
+                <tr>
+                  <td>sla                                   </td>
+                  <td>       </td>
+                  <td>0.000  </td>
+                  <td>0.001  </td>
+                  <td>0.001  </td>
+                  <td>       </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>       </td>
+                  <td>(0.000)</td>
+                  <td>(0.000)</td>
+                  <td>(0.001)</td>
+                  <td>       </td>
+                </tr>
+                <tr>
+                  <td>water_treatmentWell watered           </td>
+                  <td>       </td>
+                  <td>0.122  </td>
+                  <td>0.090  </td>
+                  <td>       </td>
+                  <td>0.117  </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>       </td>
+                  <td>(0.020)</td>
+                  <td>(0.029)</td>
+                  <td>       </td>
+                  <td>(0.017)</td>
+                </tr>
+                <tr>
+                  <td>species_nameEncelia californica       </td>
+                  <td>       </td>
+                  <td>0.238  </td>
+                  <td>       </td>
+                  <td>0.115  </td>
+                  <td>0.218  </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>       </td>
+                  <td>(0.051)</td>
+                  <td>       </td>
+                  <td>(0.059)</td>
+                  <td>(0.032)</td>
+                </tr>
+                <tr>
+                  <td>species_nameEschscholzia californica  </td>
+                  <td>       </td>
+                  <td>0.234  </td>
+                  <td>       </td>
+                  <td>0.222  </td>
+                  <td>0.232  </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>       </td>
+                  <td>(0.033)</td>
+                  <td>       </td>
+                  <td>(0.041)</td>
+                  <td>(0.032)</td>
+                </tr>
+                <tr>
+                  <td>species_nameGrindelia camporum        </td>
+                  <td>       </td>
+                  <td>0.330  </td>
+                  <td>       </td>
+                  <td>0.226  </td>
+                  <td>0.313  </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>       </td>
+                  <td>(0.047)</td>
+                  <td>       </td>
+                  <td>(0.054)</td>
+                  <td>(0.032)</td>
+                </tr>
+                <tr>
+                  <td>species_nameNasella pulchra           </td>
+                  <td>       </td>
+                  <td>0.241  </td>
+                  <td>       </td>
+                  <td>0.168  </td>
+                  <td>0.229  </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>       </td>
+                  <td>(0.040)</td>
+                  <td>       </td>
+                  <td>(0.048)</td>
+                  <td>(0.032)</td>
+                </tr>
+                <tr>
+                  <td>species_namePenstemon centranthifolius</td>
+                  <td>       </td>
+                  <td>0.061  </td>
+                  <td>       </td>
+                  <td>-0.006 </td>
+                  <td>0.050  </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>       </td>
+                  <td>(0.039)</td>
+                  <td>       </td>
+                  <td>(0.047)</td>
+                  <td>(0.032)</td>
+                </tr>
+                <tr>
+                  <td>species_nameSalvia leucophylla        </td>
+                  <td>       </td>
+                  <td>0.117  </td>
+                  <td>       </td>
+                  <td>0.139  </td>
+                  <td>0.120  </td>
+                </tr>
+                <tr>
+                  <td>                                      </td>
+                  <td>       </td>
+                  <td>(0.033)</td>
+                  <td>       </td>
+                  <td>(0.041)</td>
+                  <td>(0.032)</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.                              </td>
+                  <td>70     </td>
+                  <td>70     </td>
+                  <td>70     </td>
+                  <td>70     </td>
+                  <td>70     </td>
+                </tr>
+                <tr>
+                  <td>R2                                    </td>
+                  <td>0.000  </td>
+                  <td>0.755  </td>
+                  <td>0.303  </td>
+                  <td>0.610  </td>
+                  <td>0.754  </td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.                               </td>
+                  <td>0.000  </td>
+                  <td>0.722  </td>
+                  <td>0.282  </td>
+                  <td>0.566  </td>
+                  <td>0.726  </td>
+                </tr>
+                <tr>
+                  <td>AIC                                   </td>
+                  <td>-75.2  </td>
+                  <td>-157.5 </td>
+                  <td>-96.4  </td>
+                  <td>-127.1 </td>
+                  <td>-159.2 </td>
+                </tr>
+                <tr>
+                  <td>BIC                                   </td>
+                  <td>-70.7  </td>
+                  <td>-135.0 </td>
+                  <td>-87.4  </td>
+                  <td>-106.8 </td>
+                  <td>-139.0 </td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.                              </td>
+                  <td>39.580 </td>
+                  <td>88.741 </td>
+                  <td>52.220 </td>
+                  <td>72.538 </td>
+                  <td>88.598 </td>
+                </tr>
+                <tr>
+                  <td>RMSE                                  </td>
+                  <td>0.14   </td>
+                  <td>0.07   </td>
+                  <td>0.11   </td>
+                  <td>0.09   </td>
+                  <td>0.07   </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      function styleCell_tinytable_1rfahfw2seweer8anrzk(i, j, css_id) {
+        var table = document.getElementById("tinytable_dlxquixwnsb564c13w5d");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_dlxquixwnsb564c13w5d');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_1rfahfw2seweer8anrzk(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_dlxquixwnsb564c13w5d");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 0, 'tinytable_css_gc56s1wrnq3yg4q64bi6') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 1, 'tinytable_css_gc56s1wrnq3yg4q64bi6') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 2, 'tinytable_css_gc56s1wrnq3yg4q64bi6') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 3, 'tinytable_css_gc56s1wrnq3yg4q64bi6') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 4, 'tinytable_css_gc56s1wrnq3yg4q64bi6') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 5, 'tinytable_css_gc56s1wrnq3yg4q64bi6') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(1, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(2, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(3, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(4, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(5, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(6, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(7, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(8, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(9, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(10, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(11, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(12, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(13, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(14, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(15, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(16, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(17, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(19, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(20, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(21, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(22, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(23, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(24, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(25, 0, 'tinytable_css_cuefl4xjwpe2mgyp3q16') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(1, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(2, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(3, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(4, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(5, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(6, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(7, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(8, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(9, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(10, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(11, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(12, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(13, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(14, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(15, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(16, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(17, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(19, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(20, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(21, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(22, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(23, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(24, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(25, 1, 'tinytable_css_pe53xbnuh8m6do00t780') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(1, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(2, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(3, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(4, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(5, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(6, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(7, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(8, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(9, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(10, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(11, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(12, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(13, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(14, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(15, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(16, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(17, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(19, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(20, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(21, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(22, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(23, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(24, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(25, 2, 'tinytable_css_ys75bpdrcwspkrykhjjc') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(1, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(2, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(3, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(4, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(5, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(6, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(7, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(8, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(9, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(10, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(11, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(12, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(13, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(14, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(15, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(16, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(17, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(19, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(20, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(21, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(22, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(23, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(24, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(25, 3, 'tinytable_css_8zgsvlq23c8axpx08b8d') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(1, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(2, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(3, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(4, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(5, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(6, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(7, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(8, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(9, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(10, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(11, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(12, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(13, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(14, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(15, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(16, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(17, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(19, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(20, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(21, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(22, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(23, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(24, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(25, 4, 'tinytable_css_r2xmy2zchv9wegr4b1c1') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(0, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(1, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(2, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(3, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(4, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(5, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(6, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(7, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(8, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(9, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(10, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(11, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(12, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(13, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(14, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(15, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(16, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(17, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(19, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(20, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(21, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(22, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(23, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(24, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(25, 5, 'tinytable_css_9o28oot3pv6s9t0hxal5') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 0, 'tinytable_css_xitdd0t17goxvi8vqdkd') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 1, 'tinytable_css_xitdd0t17goxvi8vqdkd') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 2, 'tinytable_css_xitdd0t17goxvi8vqdkd') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 3, 'tinytable_css_xitdd0t17goxvi8vqdkd') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 4, 'tinytable_css_xitdd0t17goxvi8vqdkd') })
+window.addEventListener('load', function () { styleCell_tinytable_1rfahfw2seweer8anrzk(18, 5, 'tinytable_css_xitdd0t17goxvi8vqdkd') })
+    </script>
+
+  
+
+
+</div>
+</div>
+<p><strong>Table 1.</strong> Linear Models. The table above shows the listed linear models and associated predictor values used for their construction.The column header “Model” assigns a specific name to each linear model, while the “Predictor Variable” header outlines each specific predictor variable used for model construction. The “+” symbols designates that the specific variable was used in its construction while the blank spaces signifies that specific variable was not used.</p>
+</section>
+<section id="problem-1b-write-a-5-6-sentence-statistical-methods-section.-8-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1b-write-a-5-6-sentence-statistical-methods-section.-8-points">Problem 1b: Write a 5-6 sentence “statistical methods” section. (8 points)</h2>
+<p>To examine the influence of species (categorical), water treatment (categorical), and/or specific leaf area (SLA, numeric) on of total biomass, I constructed 5 individual multiple linear models testing out various combinations of these predictor variables (refer to Problem 1a). To determine the model that best described the influence of the listed predictor variables on total biomass, I first evaluated each models individual AIC score along with its delta AIC score, to pick a model that had of balance of complexity and interpretation. Afterwards, I then checked to see which model adhered best to the assumption of a linear model (residuals are homoscedastic , residual are normally distributed, outliers affecting final model) to move forward with my final decision. To evualate linear model assumptions visually I checked for constant variance of residuals by checking for a straight line and evenly distrusted residual points on the Residuals versus Fitted and Scale-Location plots, made sure that the residuals followed along reference line shown on the QQ Residuals plot, and check to make sure no outlines fell outside of the Cook’s Line on Residual verus Leverage plot.</p>
+</section>
+<section id="problem-1c.-make-a-visualization-of-the-model-predictions-with-underlying-data-for-your-best-model.-20-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1c.-make-a-visualization-of-the-model-predictions-with-underlying-data-for-your-best-model.-20-points">Problem 1c. Make a visualization of the model predictions with underlying data for your “best” model. (20 points)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creating new data frame of model predictions for plotting</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>model4_preds_for_plotting <span class="ot">&lt;-</span> model_preds_4 <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">water_treatment =</span> x,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">species_name =</span> group)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_jitter</span>(<span class="at">data =</span> drought_exp_clean,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> water_treatment,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> total_g,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group =</span> species_name,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">color =</span> water_treatment),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">data =</span> model4_preds_for_plotting,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x =</span> water_treatment,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymin =</span> conf.low,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax =</span> conf.high),</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> model4_preds_for_plotting,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> water_treatment,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> predicted)) <span class="sc">+</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Drought stressed"</span> <span class="ot">=</span> <span class="st">"#660000"</span>, <span class="st">"Well watered"</span> <span class="ot">=</span> <span class="st">"#0066CC"</span>)) <span class="sc">+</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>species_name) <span class="sc">+</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"Serif"</span>)) <span class="sc">+</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Water Treatment"</span>,</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Biomass"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="homework-03_files/figure-html/model-predictions-with-ggplot-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-2.-affective-visualization-24-points" class="level1">
+<h1>Problem 2. Affective visualization (24 points)</h1>
+<section id="problem-2a-describe-in-words-what-an-affective-visualization-could-look-like-for-your-personal-data-3-5-sentences.-2-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2a-describe-in-words-what-an-affective-visualization-could-look-like-for-your-personal-data-3-5-sentences.-2-points">Problem 2a: Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)</h2>
+<p><strong>My personal data collection revolves around tracking sleep data, including the number of hours slept, time woken up, screen time before bed, etc. Affective visualization should thematically represent common symbols associated with sleep and nighttime to communicate my data collection to others. From this, I started to think about the moon and its various phases and how I could use them to represent some aspect of my data. Given this, each moon phase could represent an associated value of my sleep quality for the night.</strong></p>
+</section>
+<section id="problem-2b-create-a-sketch-on-paper-of-your-idea.-2-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2b-create-a-sketch-on-paper-of-your-idea.-2-points">Problem 2b: Create a sketch (on paper) of your idea. (2 points)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"hw_figures/sleep_quality.pdf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="hw_figures/sleep_quality.pdf" class="img-fluid"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="probelm-2c-make-a-draft-of-your-visualization.-12-points" class="level2">
+<h2 class="anchored" data-anchor-id="probelm-2c-make-a-draft-of-your-visualization.-12-points">Probelm 2c: Make a draft of your visualization. (12 points)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"hw_figures/sleep_visualization.pdf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="hw_figures/sleep_visualization.pdf" class="img-fluid"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-2d-write-an-artist-statement.-8-points" class="level1">
+<h1>Problem 2d: Write an artist statement. (8 points)</h1>
+<p><strong>In the piece I am showing how my sleep quality varies over the month of month of May. As the moon wanes it is indicative of a lower quality of sleeps, while as it waxes it represents my sleep quality increasing. I knew that I want to draw upon figures representative to sleep and night time hence the decision to use the moon, however for formatting I was inspired my some of the artistic pieces presented in Stefanie Posavec and Giorgia Lupi’s Dear Data project. The form of my work is a visual display I made in Canvas. To make this visual I found different images of the moon online to represent different sleep levels, and then inserted them into the calendar I made to play on the idea of time and changes in sleep quality throghout the month of May.</strong></p>
+</section>
+<section id="problem-3.-statistical-critique-36-points" class="level1">
+<h1>Problem 3. Statistical critique (36 points)</h1>
+<section id="problem-3a-revisit-and-summarize-6-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3a-revisit-and-summarize-6-points">Problem 3a: Revisit and summarize (6 points)</h2>
+<p><strong>The authors used linear regression models to examine the relationship between housing vacancy and urban greening in Toledo, Ohio. They constructed separate linear regression models for the years 1980, 2000, and 2004 to evaluate the relationship between mean NDVI values and vacancy rates in Toledo. Additionally, they created a linear regression model to examine the influence of vacant housing units on the amount of overgrown lawns and dumping (a sign of blight). Lastly, the authors calculated Spearman correlations to explore the relationship between vacancy and race, wealth, poverty, and educational attainment.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"hw_figures/Figure_3.pdf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="hw_figures/Figure_3.pdf" class="img-fluid"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"hw_figures/Figure_4.pdf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="hw_figures/Figure_4.pdf" class="img-fluid"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"hw_figures/Table_2.pdf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="hw_figures/Table_2.pdf" class="img-fluid"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-3b-visual-clarity-10-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3b-visual-clarity-10-points">Problem 3b: Visual clarity (10 points)</h2>
+<p><strong>In Figures 3 and 4, the authors used meaningful x and y axes to signify their predictor and response variables for readers. For both of these linear regression models, the authors showcased the underlying data alongside the model predictions. In Figure 3, the authors differentiated data points for three grouping variables (1980, 2000, and 2014) by assigning each year and its associated data unique symbols and shapes. This helped to distinguish between the different years, boosting the level of interpretation for the graph.</strong></p>
+</section>
+<section id="problem-3c-aesthetic-clarity-10-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3c-aesthetic-clarity-10-points">Problem 3c: Aesthetic clarity (10 points)</h2>
+<p><strong>The authors focused on minimizing unnecessary visual elements required for interpreting the linear models. In both figures, visual elements are restricted to the model prediction line and the associated underlying data, enhancing interpretation while reducing complexity. One visual element that could be removed is the legend in Figure 4, faceting by each year would enable conveying the same information while reducing visual clutter. Overall the data:ink ratio in the figures is relatively strong with few areas for improvement.</strong></p>
+</section>
+<section id="problem-3d-recommendations-can-be-longer-than-4-sentences-10-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3d-recommendations-can-be-longer-than-4-sentences-10-points">Problem 3d: Recommendations (can be longer than 4 sentences, 10 points)</h2>
+<p><strong>For both Figures 3 and 4, the opacity and lack of color of the underlying data make it difficult to distinguish between points. This design choice causes individual points to merge together. Given this, I recommend that the authors reduce the opacity of the individual points and assign colors to increase clarity. Additionally, throughout the class, we have emphasized the importance of showing uncertainty in all visualizations for greater transparency in data communication. Therefore, for the linear regression models in Figures 3 and 4, I suggest including a 95 percent confidence interval around the model prediction to enhance data transparency. Lastly, as mentioned before, while the data-to-ink ratio is relatively good in the figures, there is room for improvement. In Figure 4, the authors should facet the data by year, which would eliminate the need for a legend, further reducing visual clutter.</strong></p>
+<p><strong>Note 1: notice all the information at the bottom of the <code>modelsummary</code> output - if you only needed the AIC and delta AIC, what could you do? see package documentation for help</strong></p>
+<p><strong>Note 2: you will always have to report the F-statistic, degrees of freedom, test statistic, p-value, ⍺, and R<sup>2</sup>. Whether or not this information is in a table is up to you.</strong></p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
