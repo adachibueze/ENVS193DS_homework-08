@@ -10,6 +10,8 @@ execute: # for all code chunks
     message: false # do not display messages
 ---
 
+#Link to Github repo: https://github.com/adachibueze/ENVS193DS_homework-08
+
 ## reading in packages
 
 ```{r set-up}
@@ -33,13 +35,10 @@ library(gtsummary)
 library(flextable)
 library(modelsummary)
 
+#reading in the data
 drought_exp <- read_xlsx(path = here("data", 
                                      "Valliere_etal_EcoApps_Data.xlsx"),
                          sheet = "First Harvest")
-
-# quick look at data 
-str(drought_exp)
-class(drought_exp)
 ```
 
 ## cleaning
@@ -216,7 +215,7 @@ ggplot() +
              aes(x = water_treatment,
   #setting y-axis
                  y = predicted)) +
-  #assigning colors to watertreatment
+  #assigning colors to water treatment
   scale_color_manual(values = c("Drought stressed" = "#660000", "Well watered" = "#0066CC")) +
   #faceting by species
   facet_wrap(~species_name) +
@@ -228,11 +227,42 @@ ggplot() +
         #remove legend
         legend.position = "none",
         #changing front
-        element_text(family = "Serif")) +
+        text = element_text(family = "Times")) +
   #adding meaningful labels to graph
   labs(x = "Water Treatment",
-       y = "Total Biomass")
+       y = "Total Biomass (g)")
 ```
+## Problem 1d: Write a caption for your visualization. (6 points)
+
+**Figure 1. Predictive modeling showing the influence of water treatments and plant species on total plant biomass (g). Points represent the predicted biomass of each individual plant species and their designated water treatment, calculated using linear regression, with standard error bars showing the 95% confidence interval. The underlying data points represent individual data points for well-watered and drought-stressed treatment groups for each plant species. Data from Valliere, Justin; Zhang, Jacqueline; Sharifi, M.; Rundel, Philip (2019). Data from: Can we condition native plants to increase drought tolerance and improve restoration success? [Dataset]. Dryad. https://doi.org/10.5061/dryad.v0861f7**
+
+
+## Problem 1e:Write a 3-4 sentence results section. (10 points)
+
+```{r}
+summary(model4)
+
+water <- model4_preds_for_plotting %>%
+  group_by(water_treatment) %>%
+  summarise(con_low = mean(conf.low),
+            con_high = mean(conf.high),
+            average_g = mean(predicted))
+
+species <- model4_preds_for_plotting %>%
+  group_by(species_name) %>%
+  summarise(con_low = mean(conf.low),
+            con_high = mean(conf.high),
+            average_g = mean(predicted))
+
+
+# Print the result
+print(water)
+print(species)
+  
+```
+
+
+**The predictor variables of species type and water treatment (well watered and drought stressed) significantly predicted total plant biomass in grams (F(7,62) = 27.08, p< 0.01, $\alpha$ <0.05, adjusted R^2 = 0.75). On average well watered plants had a higher biomass of 0.337 g (p < 0.001, 95% confidence interval = [0.2884552, 0.3864648]), while drought stressed plants had a average biomass of 0.220 (p < 0.001, 95% confidence interval = [0.1715095, 0.2695191]). On average, Grindelia camporum plant species had the highest plant biomass of 0.42637 (p < 0.001, 95% confidence interval = [0.37736522, 0.4753748]) followed by Eschscholzia californica with a biomass of 0.345 g (p < 0.001, 95% confidence interval = [0.28175522, 0.3797648]). While Acmispon glaber had the lowest plant biomass of 0.113 g (95% confidence interval = [0.06401522, 0.1620248]) follwed by the Penstemon centranthifolius plant species with a biomass of 0.163 g  (p > 0.005, 95% confidence interval = [0.11404522, 0.2120548]).**
 
 # Problem 2. Affective visualization (24 points)
 
@@ -290,8 +320,3 @@ knitr::include_graphics("hw_figures/Table_2.pdf")
 ## Problem 3d: Recommendations (can be longer than 4 sentences, 10 points)
 
 **For both Figures 3 and 4, the opacity and lack of color of the underlying data make it difficult to distinguish between points. This design choice causes individual points to merge together. Given this, I recommend that the authors reduce the opacity of the individual points and assign colors to increase clarity. Additionally, throughout the class, we have emphasized the importance of showing uncertainty in all visualizations for greater transparency in data communication. Therefore, for the linear regression models in Figures 3 and 4, I suggest including a 95 percent confidence interval around the model prediction to enhance data transparency. Lastly, as mentioned before, while the data-to-ink ratio is relatively good in the figures, there is room for improvement. In Figure 4, the authors should facet the data by year, which would eliminate the need for a legend, further reducing visual clutter.**
-
-
-**Note 1: notice all the information at the bottom of the `modelsummary` output - if you only needed the AIC and delta AIC, what could you do? see package documentation for help**
-
-**Note 2: you will always have to report the F-statistic, degrees of freedom, test statistic, p-value, ⍺, and R^2^. Whether or not this information is in a table is up to you.**
