@@ -1,4 +1,4 @@
-# ENVS 193DS Workshop 8/Homework 3 repository
+# ENVS 193DS Homework 3 repository
 ## Spring 2024
 
 # General information
