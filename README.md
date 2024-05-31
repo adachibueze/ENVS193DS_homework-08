@@ -238,5 +238,5 @@
 
 **Rendered output**
 
-The rendered .html for this repo is [here](https://an-bui.github.io/ENVS193DS_workshop-08/code/homework-starter-doc_KEY.html).
+The rendered .html for this repo is [here]([)](https://adachibueze.github.io/chibueze-ada_homework-03/code/chibueze-ada_homework-03.html).
 
