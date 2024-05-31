@@ -238,5 +238,5 @@
 
 **Rendered output**
 
-The rendered .html for this repo is [here]([)](https://adachibueze.github.io/chibueze-ada_homework-03/code/chibueze-ada_homework-03.html).
+The rendered .html for this repo is [here](https://adachibueze.github.io/chibueze-ada_homework-03/code/chibueze-ada_homework-03.html).
 
