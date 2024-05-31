@@ -3,12 +3,13 @@
 
 # General information
 
-**Description**: repo for Workshop 8 that provides the foundation for Homework 3  
+**Description**: Repo for Homework 03 that answers questions 1-3 
 
-**Research focus**: examining effects of specific leaf area (mm^2^/g), water treatment (well-watered or drought-stressed), and species on plant mass  
+**Homework Overview **: examining effects of specific leaf area (mm^2^/g), water treatment (well-watered or drought-stressed), and species on plant mass for Questions 1a-1e, designed affective data visualizations for personal data for questions 2a-2d, and wrote up a statistical critique for problems 3a-3d
 
-**Data source**: Valliere, Justin; Zhang, Jacqueline; Sharifi, M.; Rundel, Philip (2019). Data from: Can we condition native plants to increase drought tolerance and improve restoration success? [Dataset]. Dryad. https://doi.org/10.5061/dryad.v0861f7  
+**Data sources** Valliere, Justin; Zhang, Jacqueline; Sharifi, M.; Rundel, Philip (2019). Data from: Can we condition native plants to increase drought tolerance and improve restoration success? [Dataset]. Dryad. https://doi.org/10.5061/dryad.v0861f7 
 
+**Data sources for Statistical Critique**
 # Data and file overview
 
 ```
@@ -29,10 +30,4 @@
 # Rendered output
 
 The rendered .html for this repo is [here](https://an-bui.github.io/ENVS193DS_workshop-08/code/homework-starter-doc_KEY.html).
-
-# For full credit
-
-Your GitHub READMEs should have at least a "General information" section, a "Data and file overview" section, and a "Rendered output" section in your README for full credit.  
-
-Note that the "Data and file overview" section does not have to look exactly like the one in this repo; it can be a list of folders and files that you write out. See [this repository](https://github.com/an-bui/new-repository) as an example.
 
