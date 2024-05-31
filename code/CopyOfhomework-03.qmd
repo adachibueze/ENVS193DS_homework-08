@@ -2,9 +2,7 @@
 title: "Homework-03"
 author: "Ada Chibueze"
 date: "05-30-24"
-format: 
-  html: 
-    toc: true # includes a table of contents in rendered html format
+format: pdf
 execute: # for all code chunks
     warning: false # do not display warnings
     message: false # do not display messages
@@ -167,8 +165,9 @@ final_table <- flextable::set_table_properties(final_table, width = 1, layout = 
 # Adjust column widths of table
 final_table <- flextable::set_table_properties(final_table, width = 1)
 
+(knitr::opts_chunk$set(ft.shadow = FALSE))
 # Print flextable
-print(final_table)
+final_table
 ```
 
 **Table 1.** **Linear Model Summary. The table above shows the listed linear models and associated predictor values used for their construction.The column header "Model" assigns a specific name to each linear model, while the "Predictor Variable" header outlines each specific predictor variable used for model construction.The AIC column provides a qualitative score to each model based on their level of complexity and predictive capacity, with lower scores indicating better performance. The Delta AIC column subtracts the lowest AIC score from each model's AIC score to indicate relative model performance.**
