@@ -5,11 +5,12 @@
 
 **Description**: Repo for Homework 03 that answers questions 1-3 
 
-**Homework Overview **: examining effects of specific leaf area (mm^2^/g), water treatment (well-watered or drought-stressed), and species on plant mass for Questions 1a-1e, designed affective data visualizations for personal data for questions 2a-2d, and wrote up a statistical critique for problems 3a-3d
+**Homework Overview **: examining effects of specific leaf area (mm^2^/g), water treatment (well-watered or drought-stressed), and species on plant mass for questions 1a-1e, designed affective data visualizations for personal data for questions 2a-2d, and wrote up a statistical critique for questions 3a-3d.
 
 **Data sources** Valliere, Justin; Zhang, Jacqueline; Sharifi, M.; Rundel, Philip (2019). Data from: Can we condition native plants to increase drought tolerance and improve restoration success? [Dataset]. Dryad. https://doi.org/10.5061/dryad.v0861f7 
 
-**Data sources for Statistical Critique**
+**Source for Statistical Critique** Schwarz, K., Berland, A., & Herrmann, D. L. (2018). Green, but not just? Rethinking environmental justice indicators in shrinking cities. Sustainable Cities and Society, 41, 816–821. https://doi.org/10.1016/j.scs.2018.06.026
+
 # Data and file overview
 
 ```
